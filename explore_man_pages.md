@@ -33,8 +33,8 @@ Get familiar with the `man` command for looking up Linux commands, system calls,
 
 ### **Exercise:**
 - Please look up the **`open()` system call** and answer:
-  - What header file is required?
-  - What are the possible flags for opening a file?
+  - Question 1: What header file is required?
+  - Question 2: Name two possible flags for opening a file.
 
   ```sh
   man 2 open
@@ -60,8 +60,8 @@ Learn how to find relevant commands or functions when they don't know the exact 
    - Find a function related to **memory allocation**.
 
 3. Reflections:
-   - What function is used for allocating dynamic memory?
-   - Find its manual page and check the return type.
+   - Quesiton 3: What function is used for allocating dynamic memory?
+   - Question 4: Find its manual page and check the return type.
 
    ```sh
    man 3 malloc
@@ -97,27 +97,7 @@ Observe system calls used by a running process.
 
 ---
 
-## **Activity 4: Exploring Library Functions with `ldd`**
-### **Objective:**
-Understand which shared libraries a program depends on.
-
-### **Instructions:**
-1. Run:
-   ```sh
-   ldd /bin/ls
-   ```
-   - This shows the shared libraries `ls` is linked to.
-
-2. Reflections:
-   - What library provides `printf()`?
-   - Find its path using:
-     ```sh
-     ldd /usr/bin/echo | grep libc
-     ```
-
----
-
-## **Activity 5: Exploring `getconf` for System Limits**
+## **Activity 4: Exploring `getconf` for System Limits**
 ### **Objective:**
 Find system limits related to files, processes, and memory.
 
@@ -134,14 +114,14 @@ Find system limits related to files, processes, and memory.
    ```
 
 3. Reflections:
-   - What is the page size of memory in the system?
+   - Question 5: What is the page size of memory in the system?
      ```sh
      getconf PAGE_SIZE
      ```
 
 ---
 
-## **Activity 6: Using `proc` Filesystem for System Information**
+## **Activity 5: Using `proc` Filesystem for System Information**
 ### **Objective:**
 Learn how to check process information using `/proc`.
 
@@ -162,14 +142,14 @@ Learn how to check process information using `/proc`.
    ```
 
 4. Reflections:
-   - What is the total memory in your system?
+   - Quesiton 6: What is the total memory in your system?
      ```sh
      cat /proc/meminfo | grep MemTotal
      ```
 
 ---
 
-## **Activity 7: Debugging with `gdb`**
+## **Activity 6: Debugging with `gdb`**
 ### **Objective:**
 Learn to debug using `gdb`.
 
@@ -184,10 +164,12 @@ Learn to debug using `gdb`.
        return 0;
    }
    ```
-2. Compile with debugging symbols:
+2. Compile with debugging symbols and run the compiled program:
    ```sh
    gcc -g buggy.c -o buggy
+   ./buggy
    ```
+   Question 7: What result do you get from `./buggy`.
 
 3. Run under `gdb`:
    ```sh
@@ -200,12 +182,12 @@ Learn to debug using `gdb`.
      ```
 
 4. Reflections:
-   - What caused the segmentation fault?
-   - How can you fix it?
+   - Question 8: What caused the segmentation fault?
+   - Question 9: How can you fix it?
 
 ---
 
 ## **Final Reflection and Discussion**
-- What are three useful ways to find information about Linux commands?
-- How can you debug a program that crashes due to a segmentation fault?
-- What tools will you use when you encounter an unknown error in a system call?
+- Question 10: What are three useful ways to find information about Linux commands?
+- Question 11: How can you debug a program that crashes due to a segmentation fault?
+- Question 12: What tools will you use when you encounter an unknown error in a system call?
