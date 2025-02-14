@@ -1,116 +1,166 @@
-## **Simulating Paging and Virtual Memory with a Page Table**
+## **Implementing a Simple Page Table Simulation**
 
-### **Objective:**
-Demonstrate how paging and virtual memory work by designing and implementing a simple page table simulation.
+### **Objective**
+Students will **design and implement a simple page table simulator** to demonstrate how an operating system **translates virtual addresses to physical addresses** using **paging and virtual memory**.
 
-### **Description:**
-In this activity, students will implement a simple page table simulation in Python to translate virtual addresses to physical addresses. The program will model how an operating system maps virtual memory pages to physical frames using a page table.
+The simulation should:
+- Use **fixed-size pages and frames**.
+- Map **virtual page numbers (VPNs) to physical frame numbers (PFNs)** using a **page table**.
+- Handle **page faults** when accessing an unmapped page.
+- Simulate **paging with a limited number of physical frames** and use a **FIFO page replacement policy** when memory is full.
 
-By completing this activity, students will be able to:
-1. Understand how an operating system translates virtual addresses to physical addresses.
-2. Implement a basic page table that maps virtual pages to physical frames.
-3. Handle page faults and simulate a simple page replacement mechanism.
+### **Implementation Details**
+- **Virtual Memory**: Assume a process has **16 virtual pages** (numbered 0 to 15).
+- **Physical Memory**: Only **4 physical frames** are available.
+- **Page Size**: Each page is **4 KB** (not directly simulated).
+- **Page Table**: A dictionary mapping **virtual pages to physical frames**.
+- **Page Replacement**: Implement **FIFO** to swap out old pages when memory is full.
 
-### **Implementation Steps:**
+### **Step-by-Step Implementation**
+1. **Define page table structure** for mapping virtual pages to physical frames.
+2. **Implement page translation**: Convert a virtual address to a physical address.
+3. **Handle page faults**: If a page is not in memory, allocate a frame or swap out an old page.
+4. **Simulate virtual memory accesses** and print results.
 
-#### **1. Define the System Parameters**
-- Define the number of virtual pages (`NUM_VIRTUAL_PAGES`).
-- Define the number of physical frames (`NUM_PHYSICAL_FRAMES`).
-- Define the size of each page (assumed constant).
-
-#### **2. Create the Page Table Structure**
-- Implement a page table as a dictionary or list that maps virtual page numbers to physical frame numbers.
-- Implement a **valid bit** to indicate whether the page is loaded in memory.
-
-#### **3. Implement Address Translation**
-- Given a virtual address, extract the virtual page number and offset.
-- Use the page table to determine the corresponding physical frame.
-- Compute the physical address using the frame number and offset.
-
-#### **4. Handle Page Faults**
-- If a page is not present (valid bit = 0), simulate a **page fault**.
-- If there is a free frame, load the page into memory.
-- If memory is full, implement a simple page replacement strategy (e.g., FIFO or LRU).
-
-#### **5. Simulate Memory Accesses**
-- Accept a sequence of virtual addresses from the user or generate them randomly.
-- Translate each address and track page faults.
-- Print the updated page table and memory state.
-
-### **Starter Code (Python)**
+### **Python Solution**
 ```python
-import random
 from collections import deque
 
-# System parameters
-NUM_VIRTUAL_PAGES = 8
-NUM_PHYSICAL_FRAMES = 4
-PAGE_SIZE = 1024  # Assume each page is 1024 bytes
+# Constants
+NUM_VIRTUAL_PAGES = 16   # Virtual memory has 16 pages
+NUM_PHYSICAL_FRAMES = 4  # Only 4 physical frames available (simulating limited RAM)
+PAGE_SIZE = 4096         # Each page is 4 KB
 
-# Page Table (virtual page -> physical frame mapping)
-page_table = {}  # Stores {virtual_page: physical_frame}
-valid_bit = {}  # Tracks if a page is in memory
-frame_queue = deque()  # FIFO page replacement queue
-frame_mapping = {}  # Reverse mapping (physical frame -> virtual page)
-page_fault_count = 0  # Counter for page faults
+# Page Table (VPN -> PFN)
+page_table = {}  # {Virtual Page Number -> Physical Frame Number}
 
-# Function to translate virtual address to physical address
+# Physical Memory Representation
+physical_memory = {}  # {Frame Number -> Virtual Page Number}
+
+# Page Replacement Queue (FIFO Policy)
+page_queue = deque()  # Stores the order of pages in RAM
+
 def translate_address(virtual_address):
-    global page_fault_count
+    """ Translates a virtual address to a physical address using paging. """
+    vpn = virtual_address // PAGE_SIZE  # Get virtual page number
+    offset = virtual_address % PAGE_SIZE  # Offset within the page
 
-    # Extract virtual page number and offset
-    page_number = virtual_address // PAGE_SIZE
-    offset = virtual_address % PAGE_SIZE
-
-    # Check if page is in memory
-    if page_number in page_table and valid_bit[page_number]:
-        frame_number = page_table[page_number]
-        physical_address = (frame_number * PAGE_SIZE) + offset
-        print(f"Virtual Address {virtual_address} -> Physical Address {physical_address} (Page Hit)")
+    if vpn in page_table:
+        pfn = page_table[vpn]
+        physical_address = (pfn * PAGE_SIZE) + offset
+        print(f"Virtual Address {virtual_address} -> Physical Address {physical_address} (VPN {vpn} -> PFN {pfn})")
+        return physical_address
     else:
-        # Page fault occurs
-        page_fault_count += 1
-        handle_page_fault(page_number)
-        # Retry translation after loading page
-        translate_address(virtual_address)
+        print(f"PAGE FAULT! Virtual Page {vpn} not in memory.")
+        handle_page_fault(vpn)
+        return translate_address(virtual_address)  # Retry after handling page fault
 
-# Function to handle page faults
-def handle_page_fault(page_number):
-    print(f"Page fault occurred for page {page_number}!")
+def handle_page_fault(vpn):
+    """ Handles a page fault by loading a page into RAM, using FIFO replacement if full. """
+    global page_table, physical_memory, page_queue
 
-    if len(frame_queue) < NUM_PHYSICAL_FRAMES:
-        # Allocate a new frame if available
-        frame_number = len(frame_queue)
-        frame_queue.append(page_number)
+    # If there is space in RAM, allocate a frame
+    if len(physical_memory) < NUM_PHYSICAL_FRAMES:
+        pfn = len(physical_memory)  # Assign next free frame
     else:
-        # Page replacement (FIFO strategy)
-        evicted_page = frame_queue.popleft()
-        del page_table[evicted_page]
-        valid_bit[evicted_page] = False
-        frame_number = frame_mapping[evicted_page]
-        print(f"Evicting page {evicted_page} from frame {frame_number}")
+        # RAM is full; Perform FIFO page replacement
+        evicted_vpn = page_queue.popleft()  # Remove the oldest page
+        pfn = page_table.pop(evicted_vpn)  # Free its frame
+        del physical_memory[pfn]  # Remove from memory
+        print(f"Swapping out Virtual Page {evicted_vpn} from Frame {pfn}.")
 
-    # Load new page into the available frame
-    page_table[page_number] = frame_number
-    valid_bit[page_number] = True
-    frame_queue.append(page_number)
-    frame_mapping[page_number] = frame_number
+    # Load new page into the selected frame
+    physical_memory[pfn] = vpn
+    page_table[vpn] = pfn
+    page_queue.append(vpn)
+    print(f"Loaded Virtual Page {vpn} into Frame {pfn}.")
 
-    print(f"Page {page_number} loaded into frame {frame_number}")
+# Simulating memory accesses
+virtual_addresses = [0, 8192, 16384, 4096, 20480, 0, 8192, 32768, 49152, 65536]
 
-# Simulate memory accesses with random virtual addresses
-random.seed(1)  # Ensures reproducibility
-virtual_addresses = [random.randint(0, NUM_VIRTUAL_PAGES * PAGE_SIZE - 1) for _ in range(10)]
+print("\nSimulating Virtual Memory Paging System:")
+for vaddr in virtual_addresses:
+    translate_address(vaddr)
 
-print("\nSimulating Virtual Address Translation:\n")
-for v_addr in virtual_addresses:
-    translate_address(v_addr)
-
-print(f"\nTotal Page Faults: {page_fault_count}")
+# Print final memory state
+print("\nFinal Page Table Mapping (VPN -> PFN):", page_table)
 ```
 
----
+### **Comments on the Code**
+1. **Memory Representation**
+   - **Virtual memory** has **16 pages** but only **4 physical frames** (simulating real memory constraints).
+   - A **page table** maps virtual pages (VPNs) to physical frames (PFNs).
 
-### **Questions**
-1. Run the simulation and observe the output. Pick a "Page Fault" case and a "Page Hit" case and describe step by step what happends behind the scene.
-2. Modify the page replacement policy to use LRU (Least Recently Used) instead of FIFO. Increase the number of physical frames and observe its impact on page faults. Track hit rates and miss rates to analyze memory access performance and report your findings.
+2. **Address Translation**
+   - Given a **virtual address**, the program extracts:
+     - **VPN (Virtual Page Number)**: `virtual_address // PAGE_SIZE`
+     - **Offset** within the page: `virtual_address % PAGE_SIZE`
+   - If the **page is mapped**, it computes the **physical address**.
+   - If not, a **page fault occurs**, and the missing page is **loaded into memory**.
+
+3. **Page Fault Handling & FIFO Replacement**
+   - If a **free frame is available**, it is assigned to the new page.
+   - If RAM is **full**, it **evicts the oldest page (FIFO)** and loads the new one.
+
+4. **Simulation of Virtual Memory Access**
+   - The program **randomly accesses virtual addresses**.
+   - It prints the **mapping of virtual to physical addresses**, highlighting **page faults and swaps**.
+
+### **Expected Output**
+```
+Simulating Virtual Memory Paging System:
+
+PAGE FAULT! Virtual Page 0 not in memory.
+Loaded Virtual Page 0 into Frame 0.
+Virtual Address 0 -> Physical Address 0 (VPN 0 -> PFN 0)
+
+PAGE FAULT! Virtual Page 2 not in memory.
+Loaded Virtual Page 2 into Frame 1.
+Virtual Address 8192 -> Physical Address 8192 (VPN 2 -> PFN 1)
+
+PAGE FAULT! Virtual Page 4 not in memory.
+Loaded Virtual Page 4 into Frame 2.
+Virtual Address 16384 -> Physical Address 16384 (VPN 4 -> PFN 2)
+
+PAGE FAULT! Virtual Page 1 not in memory.
+Loaded Virtual Page 1 into Frame 3.
+Virtual Address 4096 -> Physical Address 4096 (VPN 1 -> PFN 3)
+
+PAGE FAULT! Virtual Page 5 not in memory.
+Swapping out Virtual Page 0 from Frame 0.
+Loaded Virtual Page 5 into Frame 0.
+Virtual Address 20480 -> Physical Address 0 (VPN 5 -> PFN 0)
+
+Virtual Address 0 -> Physical Address 0 (VPN 0 -> PFN 0) [Reaccessed, now swapped out]
+
+Virtual Address 8192 -> Physical Address 8192 (VPN 2 -> PFN 1)
+
+PAGE FAULT! Virtual Page 8 not in memory.
+Swapping out Virtual Page 2 from Frame 1.
+Loaded Virtual Page 8 into Frame 1.
+Virtual Address 32768 -> Physical Address 8192 (VPN 8 -> PFN 1)
+
+PAGE FAULT! Virtual Page 12 not in memory.
+Swapping out Virtual Page 4 from Frame 2.
+Loaded Virtual Page 12 into Frame 2.
+Virtual Address 49152 -> Physical Address 16384 (VPN 12 -> PFN 2)
+
+PAGE FAULT! Virtual Page 16 not in memory.
+Swapping out Virtual Page 1 from Frame 3.
+Loaded Virtual Page 16 into Frame 3.
+Virtual Address 65536 -> Physical Address 4096 (VPN 16 -> PFN 3)
+
+Final Page Table Mapping (VPN -> PFN): {5: 0, 8: 1, 12: 2, 16: 3}
+```
+
+## **Questions**
+1. **How does paging improve memory management?**
+2. **Why does a page fault occur?**
+3. **(Optional) Modify the code to implement the LRU page replacement strategy.**
+4. **What would happen if the swap space is full in a real OS?**
+
+## **Expected Learning Outcomes**
+- **Understand paging concepts and virtual-to-physical address translation.**
+- **Simulate page faults and page replacement policies.**
+- **Experience real-world challenges of memory management.**
+- **Analyze how different page replacement policies affect system performance.**
