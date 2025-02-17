@@ -1,7 +1,7 @@
-## **Implementing a Simple Memory Segmentation Simulator**
+## **Simulating Simple Memory Segmentation**
 
 ### **Objective**
-Students will design and implement a **simple memory segmentation simulator** to understand how an operating system manages memory using **variable-sized segments**. The simulator should:
+Students will study and modify a **simple memory segmentation simulator** to understand how an operating system manages memory using **variable-sized segments**. The simulator should:
 - Represent a **process's memory layout** using **segments**.
 - Support **dynamic allocation and deallocation** of segments.
 - Simulate **external fragmentation** and the **first-fit allocation strategy**.
@@ -149,10 +149,9 @@ Memory Layout:
 ```
 
 ### **Questions**
-1. **How does segmentation differ from paging?**
+1. **Create a scenario in which there is enough (total) memory but no single free block is large enough for the allocation. Report the actual output of your scenario.**
 2. **What are the advantages and disadvantages of first-fit allocation?**
-3. **(Optional) Modify the code to implement the best-fit allocation strategy.**
-4. **How does fragmentation affect memory utilization?**
+3. **(Optional) Modify the code to implement the best-fit and worst-fit allocation strategies. Create a few test scenarios and report the actual output of the scenarios.**
 
 ### **Expected Learning Outcomes**
 - **Understand how memory segmentation works** in an OS.
