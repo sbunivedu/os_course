@@ -1,7 +1,7 @@
 ## **Implementing a Simple Page Table Simulation**
 
 ### **Objective**
-Students will **experiment a simple page table simulator** to gain insight into how an operating system **translates virtual addresses to physical addresses** using **paging and virtual memory**.
+Students will **experiment with a simple page table simulator** to gain insight into how an operating system **translates virtual addresses to physical addresses** using **paging and virtual memory**.
 
 Assumptions:
 - Use **fixed-size pages and frames**.
