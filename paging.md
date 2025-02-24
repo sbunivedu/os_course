@@ -1,9 +1,9 @@
 ## **Implementing a Simple Page Table Simulation**
 
 ### **Objective**
-Students will **design and implement a simple page table simulator** to demonstrate how an operating system **translates virtual addresses to physical addresses** using **paging and virtual memory**.
+Students will **experiment a simple page table simulator** to gain insight into how an operating system **translates virtual addresses to physical addresses** using **paging and virtual memory**.
 
-The simulation should:
+Assumptions:
 - Use **fixed-size pages and frames**.
 - Map **virtual page numbers (VPNs) to physical frame numbers (PFNs)** using a **page table**.
 - Handle **page faults** when accessing an unmapped page.
@@ -156,7 +156,7 @@ Final Page Table Mapping (VPN -> PFN): {5: 0, 8: 1, 12: 2, 16: 3}
 ## **Questions**
 1. **How does paging improve memory management?**
 2. **Why does a page fault occur?**
-3. **(Optional) Modify the code to implement the LRU page replacement strategy.**
+3. **(Challenge) Modify the code to implement the LRU page replacement strategy.**
 4. **What would happen if the swap space is full in a real OS?**
 
 ## **Expected Learning Outcomes**
