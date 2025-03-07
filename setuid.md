@@ -1,4 +1,4 @@
-### Exploring Linux Security – Setuid, sudo, ACLs, and Capabilities**
+### **Exploring Linux Security – Setuid, sudo, ACLs, and Capabilities**
 
 #### **Objective:**
 Gain hands-on experience with Linux security mechanisms by exploring and manipulating file permissions (including the setuid bit), configuring sudo privileges, and working with access control lists (ACLs) and capabilities. Students will learn how these features enhance security and control user privileges.
