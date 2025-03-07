@@ -140,7 +140,3 @@ Gain hands-on experience with Linux security mechanisms by exploring and manipul
    - What security risks are associated with setuid programs, and how does Linux mitigate these risks?
    - How does sudo provide controlled privilege escalation compared to a full root login?
    - In what scenarios would ACLs and capabilities be preferred over traditional permission models?
-
-3. **Group Discussion:**
-   - Discuss potential real-world security vulnerabilities arising from misconfigured ACLs or inappropriate use of setuid and capabilities.
-   - Propose best practices for administrators to secure their systems using these tools.
