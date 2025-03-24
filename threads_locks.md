@@ -1,4 +1,4 @@
-This program, `x86.py`, allows you to see how different thread interleavings either cause or avoid race conditions. See the [README](https://github.com/remzi-arpacidusseau/ostep-homework/blob/master/threads-intro/README.md) for details on how the program works and answer the questions below.
+This program, `x86.py`, allows you to see how different thread interleavings either cause or avoid race conditions. See the [README](https://github.com/remzi-arpacidusseau/ostep-homework/blob/master/threads-locks/README.md) for details on how the program works and answer the questions below. All source code can be found the same respository as the README.
 
 ## Questions
 1. Examine `flag.s`. This code “implements” locking with a single memory flag. Can you understand the assembly?
