@@ -3,7 +3,7 @@
 #### **Objective:**
 Students will experiment with **multi-threading** in Java to understand **synchronization mechanisms** such as **monitors** and **semaphores**. They will solve **classic inter-process communication (IPC) problems**, including the **Bounded Buffer** (Producer-Consumer) and **Reader-Writer** problems, ensuring correct concurrent behavior.
 
-## Activity I: Implementing the Bounded Buffer (Producer-Consumer) Problem Using Semaphores**
+## Activity I: Implementing the Bounded Buffer (Producer-Consumer) Problem Using Semaphores
 
 ### **Instructions:**
 1. **Understand the Problem:** The bounded buffer problem models a scenario where producers generate data and place it into a shared buffer, while consumers retrieve data. The buffer has a fixed capacity, and synchronization is required to prevent race conditions and deadlocks.
