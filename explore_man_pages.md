@@ -22,7 +22,7 @@ Get familiar with the `man` command for looking up Linux commands, system calls,
    ```sh
    man 2 fork
    ```
-5. Look up the `printf()` function:
+5. Look up the `printf()` function. Try `man printf` first, what does it find?
    ```sh
    man 3 printf
    ```
