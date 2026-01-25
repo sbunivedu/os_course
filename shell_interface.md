@@ -1,4 +1,4 @@
-## Mastering the Shell Interface
+## Exploring the Shell Interface
 This guided exercise is designed to be performed in a standard Linux terminal (or macOS). It allows students to "feel" the behavior of the OS before they attempt to code these features in C.
 
 ### **Part 1: Foreground vs. Background Execution**
@@ -50,20 +50,21 @@ Run the following complex command:
 2. Did the shell wait for it to finish?
 3. Check the file `cat zip_commands.txt`.
 
-## **Reflections & Review**
+## **Reflections**
 
-1. **The Shell’s Role:** In Part 1, when you ran `sleep 5`, was the *shell* sleeping, or was a *child process* sleeping? If the shell was sleeping, how could it know when the 5 seconds were up?
+**The Shell’s Role:** In Part 1, when you ran `sleep 5`, was the *shell* sleeping, or was a *child process* sleeping? If the shell was sleeping, how could it know when the 5 seconds were up?
 > **Concept:** The shell is almost always sitting in `wait()`. It isn't doing work; it's waiting for a signal that a child has changed state.
 
-2. **Redirection vs. Program Logic:** Does the `echo` command "know" it is writing to a file in Part 2?
+**Redirection vs. Program Logic:** Does the `echo` command "know" it is writing to a file in Part 2?
 > **Concept:** No. `echo` just writes to File Descriptor 1 (`stdout`). The shell "manipulated the plumbing" (using `dup2`) before `echo` even started. This is the beauty of **orthogonality**.
 
-3. **Piping Efficiency:** In Part 3, does the first command (`ls`) have to finish completely before `grep` starts?
+**Piping Efficiency:** In Part 3, does the first command (`ls`) have to finish completely before `grep` starts?
 > **Concept:** No! They run in parallel. As soon as `ls` puts data into the pipe, `grep` can start reading it. The OS handles the synchronization.
 
-4. **The `&` Operator:** When you run a command in the background, which process becomes the "parent" of that command? If you close your terminal, what happens to that background process?
+**The `&` Operator:** When you run a command in the background, which process becomes the "parent" of that command? If you close your terminal, what happens to that background process?
 > **Concept:** The shell is the parent. If the parent dies, the child becomes an "orphan" and is typically adopted by the `init` process (PID 1).
 
+## **Review Questions**
 Question 1: When a shell executes a command in the foreground, what is the primary system call the parent process uses to pause its own execution until the command finishes?
 - A) wait()
 - B) sleep()
