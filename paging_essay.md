@@ -1,6 +1,6 @@
 # Paging
 
-Please read the relevant chapters on paging and answer the questions:
+Please read the relevant chapters on paging and answer each question in three to five sentences:
 
 1. Explain why the simple segmentation or base+bounds approach becomes problematic in modern systems (e.g., large address spaces, fragmentation, sparse allocation) and how paging addresses those problems.
 
