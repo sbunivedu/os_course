@@ -83,6 +83,7 @@ VA = 16.
 Physical address = PF7x16 + 0 = 7x16 = 112
 
 </details>
+
 #### Trace 5
 
 VA = 63.
