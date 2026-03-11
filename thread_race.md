@@ -250,7 +250,7 @@ What happened when you increased the number of threads? Did the bug appear every
 Question 5:
 * Why are concurrency bugs often hard to reproduce?
 
-## Main concepts reinforced
+## Main concepts
 
 * thread creation
 * start vs run
