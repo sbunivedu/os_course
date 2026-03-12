@@ -183,8 +183,12 @@ That is a **race condition**: the result depends on the timing of the threads.
 Replace the code with this version:
 
 ```java
-public class RaceConditionDemo {
+public class RaceConditionDemoFixed {
   static int counter = 0;
+
+  public static synchronized void increment() {
+    counter++;
+  }
 
   static class CounterTask extends Thread {
     private int numIncrements;
@@ -196,24 +200,27 @@ public class RaceConditionDemo {
     @Override
     public void run() {
       for (int i = 0; i < numIncrements; i++) {
-        counter++; // not thread-safe
+        increment();
       }
     }
   }
 
   public static void main(String[] args) throws InterruptedException {
     int incrementsPerThread = 100000;
+    int numThreads = 8;
 
-    Thread t1 = new CounterTask(incrementsPerThread);
-    Thread t2 = new CounterTask(incrementsPerThread);
+    Thread[] threads = new Thread[numThreads];
 
-    t1.start();
-    t2.start();
+    for (int i = 0; i < numThreads; i++) {
+      threads[i] = new CounterTask(incrementsPerThread);
+      threads[i].start();
+    }
 
-    t1.join();
-    t2.join();
+    for (int i = 0; i < numThreads; i++) {
+      threads[i].join();
+    }
 
-    System.out.println("Expected counter value: " + (2 * incrementsPerThread));
+    System.out.println("Expected counter value: " + (numThreads * incrementsPerThread));
     System.out.println("Actual counter value:   " + counter);
   }
 }
