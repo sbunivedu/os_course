@@ -61,7 +61,11 @@ Before writing code, answer these questions.
 
 What should happen if `acquire()` is called when `permits > 0`?
 
-**Answer:** The thread should decrease `permits` by 1 and continue.
+<details>
+<summary>answer</summary>
+
+The thread should decrease `permits` by 1 and continue.
+</details>
 
 ### Q2
 
